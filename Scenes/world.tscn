@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://bxri2ovnf4nse"]
+
+[ext_resource type="Texture2D" uid="uid://cir8vyje5enav" path="res://Textures/cobblestone.png" id="1_a105j"]
+[ext_resource type="PackedScene" uid="uid://7v5q1i10fneg" path="res://Scenes/player_controller.tscn" id="2_60ju1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ekki4"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_okwsm"]
+sky_material = SubResource("ProceduralSkyMaterial_ekki4")
+
+[sub_resource type="Environment" id="Environment_5isl0"]
+background_mode = 2
+sky = SubResource("Sky_okwsm")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k0u5d"]
+albedo_texture = ExtResource("1_a105j")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ffe1i"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j5vim"]
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5isl0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="EnvironmentMeshes" type="Node3D" parent="."]
+
+[node name="GroundPlane" type="CSGBox3D" parent="EnvironmentMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00803566, -0.032505, -0.00945663)
+material_override = SubResource("StandardMaterial3D_k0u5d")
+use_collision = true
+size = Vector3(100, 0.002, 100)
+
+[node name="Box" type="MeshInstance3D" parent="EnvironmentMeshes"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.59898, 1, -9.38562)
+mesh = SubResource("BoxMesh_ffe1i")
+
+[node name="BoxBody" type="StaticBody3D" parent="EnvironmentMeshes/Box"]
+
+[node name="BoxCollision" type="CollisionShape3D" parent="EnvironmentMeshes/Box/BoxBody"]
+shape = SubResource("BoxShape3D_j5vim")
+
+[node name="Ramp" type="CSGPolygon3D" parent="EnvironmentMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5028, 0, 0.479416)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 0, 2.86617, 0.914696, 3, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_60ju1")]
