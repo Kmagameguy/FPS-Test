@@ -22,7 +22,6 @@ func _physics_process(delta: float) -> void:
 
 func _on_child_transition(new_state_name: StringName) -> void:
 	var new_state = states.get(new_state_name)
-	print("Entering: " + new_state.name)
 
 	if new_state != null:
 		if new_state != CURRENT_STATE:

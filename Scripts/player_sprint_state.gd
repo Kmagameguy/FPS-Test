@@ -8,7 +8,7 @@ func update(delta: float) -> void:
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
-	
+
 	if Input.is_action_just_released(PLAYER.STATES.SPRINT.ACTION):
 		transition.emit(PLAYER.STATES.WALK.NAME)
 
