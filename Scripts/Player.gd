@@ -61,18 +61,18 @@ func _physics_process(delta: float) -> void:
 	#var _input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
 	#var _direction: Vector3 = (head.transform.basis * Vector3(_input_dir.x, 0, _input_dir.y)).normalized()
 
-	# Head bob
-	# TODO: this is kinda broken, need to figure out a good way to fix it.
-	_t_bob += delta * velocity.length() * float(is_on_floor())
-
-	player_view.transform.origin = _headbob(_t_bob)
 	#player_view.fov = lerp(player_view.fov, _calculate_fov(_current_speed), delta * 0.8)
 
 func is_in_air() -> bool:
 	return !is_on_floor()
 
-func _calculate_fov(speed: float) -> float:
-	return BASE_FOV + FOV_MULTIPLIER * clamp(velocity.length(), 0.5, speed * 2)
+func update_headbob(delta: float):
+	_t_bob += delta * velocity.length() * float(is_on_floor())
+	player_view.transform.origin = _headbob(_t_bob)
+
+func update_fov(speed: float, delta: float):
+	var target_fov = BASE_FOV + FOV_MULTIPLIER * clamp(velocity.length(), 0.5, speed * 2)
+	player_view.fov = lerp(player_view.fov, target_fov, delta * 0.8)
 
 func _headbob(time: float) -> Vector3:
 	var pos: Vector3 = Vector3.ZERO
