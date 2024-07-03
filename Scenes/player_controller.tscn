@@ -1,6 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://7v5q1i10fneg"]
+[gd_scene load_steps=12 format=3 uid="uid://7v5q1i10fneg"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m2e61"]
+[ext_resource type="Script" path="res://Scripts/player_state_machine.gd" id="2_033c6"]
+[ext_resource type="Script" path="res://Scripts/player_idle_state.gd" id="3_3uyrk"]
+[ext_resource type="Script" path="res://Scripts/player_walk_state.gd" id="4_2vd8x"]
+[ext_resource type="Script" path="res://Scripts/player_tip_toe_state.gd" id="4_16a1l"]
+[ext_resource type="Script" path="res://Scripts/player_jump_state.gd" id="4_l6q85"]
+[ext_resource type="Script" path="res://Scripts/player_fall_state.gd" id="4_lomln"]
+[ext_resource type="Script" path="res://Scripts/player_sprint_state.gd" id="5_d13fw"]
+[ext_resource type="Script" path="res://Scripts/player_double_jump_state.gd" id="5_jalsx"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i5u8c"]
 
@@ -23,3 +31,28 @@ shape = SubResource("ConvexPolygonShape3D_00688")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61846, 0.338459)
 
 [node name="PlayerView" type="Camera3D" parent="Head"]
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("CURRENT_STATE")]
+script = ExtResource("2_033c6")
+CURRENT_STATE = NodePath("PlayerIdleState")
+
+[node name="PlayerIdleState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("3_3uyrk")
+
+[node name="PlayerFallState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_lomln")
+
+[node name="PlayerJumpState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_l6q85")
+
+[node name="PlayerDoubleJumpState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_jalsx")
+
+[node name="PlayerTipToeState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_16a1l")
+
+[node name="PlayerSprintState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_d13fw")
+
+[node name="PlayerWalkState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_2vd8x")
