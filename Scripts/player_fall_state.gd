@@ -20,6 +20,9 @@ func update(delta: float) -> void:
 	if PLAYER.is_on_floor():
 		transition.emit(PLAYER.STATES.IDLE.NAME)
 
+func update_physics(delta: float) -> void:
+	PLAYER.update_fov(SPEED, delta)
+
 func _not_previously_jumping() -> bool:
 	return !(_previous_state is PlayerJumpState ||
 				_previous_state is PlayerDoubleJumpState)

@@ -21,5 +21,6 @@ func update(delta: float) -> void:
 	if PLAYER.velocity.y < -3.0 && PLAYER.is_in_air():
 		transition.emit(PLAYER.STATES.FALL.NAME)
 
-func update_physics(delta: float):
+func update_physics(delta: float) -> void:
 	PLAYER.update_headbob(delta)
+	PLAYER.update_fov(SPEED, delta)

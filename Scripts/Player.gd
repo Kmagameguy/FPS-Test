@@ -46,14 +46,8 @@ func _input(event: InputEvent) -> void:
 func _is_moving_mouse_in_captured_window(event: InputEvent) -> bool:
 	return event is InputEventMouseMotion && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 
-func _physics_process(delta: float) -> void:
-	if is_in_air():
-		# We don't apply headbob while jumping/falling so
-		# take this opportunity to reset the "bob time" counter.
-		# otherwise this would keep incrementing off into infinity.
-		# Be a little more memory efficient.
-		_t_bob = lerp(_t_bob, 0.0, delta * 0.5)
-
+func _physics_process(_delta: float) -> void:
+	pass
 	# Get the input direction and handle the movement/deceleration.
 	# TODO: get rid of this commented code.  Keeping it here for now because it's a bit different
 	# than what's in the update_input method below.  need to test to see if there's any
@@ -61,18 +55,23 @@ func _physics_process(delta: float) -> void:
 	#var _input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
 	#var _direction: Vector3 = (head.transform.basis * Vector3(_input_dir.x, 0, _input_dir.y)).normalized()
 
-	#player_view.fov = lerp(player_view.fov, _calculate_fov(_current_speed), delta * 0.8)
-
 func is_in_air() -> bool:
 	return !is_on_floor()
 
-func update_headbob(delta: float):
-	_t_bob += delta * velocity.length() * float(is_on_floor())
-	player_view.transform.origin = _headbob(_t_bob)
+func update_headbob(delta: float) -> void:
+	if is_in_air():
+		# We don't apply headbob while jumping/falling so
+		# take this opportunity to reset the "bob time" counter.
+		# otherwise this would keep incrementing off into infinity.
+		# Be a little more memory efficient.
+		_t_bob = lerp(_t_bob, 0.0, delta * 0.5)
+	else:
+		_t_bob += delta * velocity.length() * float(is_on_floor())
+		player_view.transform.origin = _headbob(_t_bob)
 
-func update_fov(speed: float, delta: float):
+func update_fov(speed: float, delta: float) -> void:
 	var target_fov = BASE_FOV + FOV_MULTIPLIER * clamp(velocity.length(), 0.5, speed * 2)
-	player_view.fov = lerp(player_view.fov, target_fov, delta * 0.8)
+	player_view.fov = lerp(player_view.fov, target_fov, delta * 9.0)
 
 func _headbob(time: float) -> Vector3:
 	var pos: Vector3 = Vector3.ZERO
