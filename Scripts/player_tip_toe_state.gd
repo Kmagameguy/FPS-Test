@@ -14,6 +14,9 @@ func update(delta: float) -> void:
 
 	if Input.is_action_just_pressed(PLAYER.STATES.JUMP.ACTION):
 		transition.emit(PLAYER.STATES.JUMP.NAME)
+		
+	if Input.is_action_just_pressed(PLAYER.STATES.CROUCH.ACTION):
+		transition.emit(PLAYER.STATES.CROUCH.NAME)
 
 	if PLAYER.velocity.length() == 0.0 && PLAYER.is_on_floor():
 		transition.emit(PLAYER.STATES.IDLE.NAME)

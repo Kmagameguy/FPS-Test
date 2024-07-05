@@ -50,6 +50,15 @@ mesh = SubResource("BoxMesh_ffe1i")
 [node name="BoxCollision" type="CollisionShape3D" parent="EnvironmentMeshes/Box/BoxBody"]
 shape = SubResource("BoxShape3D_j5vim")
 
+[node name="Box2" type="MeshInstance3D" parent="EnvironmentMeshes"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.94647, 2.67811, -9.38562)
+mesh = SubResource("BoxMesh_ffe1i")
+
+[node name="BoxBody" type="StaticBody3D" parent="EnvironmentMeshes/Box2"]
+
+[node name="BoxCollision" type="CollisionShape3D" parent="EnvironmentMeshes/Box2/BoxBody"]
+shape = SubResource("BoxShape3D_j5vim")
+
 [node name="Ramp" type="CSGPolygon3D" parent="EnvironmentMeshes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5028, 0, 0.479416)
 use_collision = true
