@@ -85,15 +85,17 @@ func update_gravity(delta: float) -> void:
 func update_input(speed: float, acceleration: float, deceleration: float) -> void:
 	var _input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
 	var _direction: Vector3 = (head.transform.basis * Vector3(_input_dir.x, 0, _input_dir.y)).normalized()
-	
+
 	if _direction:
 		velocity.x = lerp(velocity.x, _direction.x * speed, acceleration)
 		velocity.z = lerp(velocity.z, _direction.z * speed, acceleration)
 	else:
-		var current_velocity = Vector3(velocity.x, velocity.y, velocity.z)
-		var temp_vector = move_toward(Vector3(velocity.x, velocity.y, velocity.z).length(), 0, deceleration)
-		velocity.x = current_velocity.normalized().x * temp_vector
-		velocity.z = current_velocity.normalized().z * temp_vector
+		var horizontal_velocity := Vector3(velocity.x, 0, velocity.z)
+		var new_speed := move_toward(horizontal_velocity.length(), 0, deceleration)
+		var new_horizontal := horizontal_velocity.normalized() * new_speed
+
+		velocity.x = new_horizontal.x
+		velocity.z = new_horizontal.z
 
 func update_velocity() -> void:
 	move_and_slide()
