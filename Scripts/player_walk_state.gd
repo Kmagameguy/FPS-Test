@@ -25,5 +25,5 @@ func physics_update(delta: float) -> void:
 	if PLAYER.velocity.length() == 0.0:
 		transition.emit(PLAYER.STATES.IDLE.NAME)
 
-	if PLAYER.velocity.y < -3.0 && PLAYER.is_in_air():
+	if PLAYER.velocity.y < PLAYER.FALL_VELOCITY_THRESHOLD && PLAYER.is_in_air():
 		transition.emit(PLAYER.STATES.FALL.NAME)

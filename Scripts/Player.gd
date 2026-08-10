@@ -12,6 +12,7 @@ const TILT_UPPER_LIMIT : float  = deg_to_rad(90)
 const FOV_MULTIPLIER   : float  = 1.5
 const FLOOR_VELOCITY_MULTIPLIER: float = 7.0
 const AIR_VELOCITY_MULTIPLIER  : float = 3.0
+const FALL_VELOCITY_THRESHOLD  : float = -3.0
 
 const STATES: Dictionary = {
 	IDLE    = { NAME = "PlayerIdleState", ACTION = null },
