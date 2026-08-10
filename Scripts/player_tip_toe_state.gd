@@ -16,7 +16,7 @@ func physics_update(delta: float) -> void:
 	if Input.is_action_just_released(PLAYER.STATES.TIP_TOE.ACTION):
 		transition.emit(PLAYER.STATES.WALK.NAME)
 
-	if Input.is_action_just_pressed(PLAYER.STATES.JUMP.ACTION):
+	if Input.is_action_just_pressed(PLAYER.STATES.JUMP.ACTION) && PLAYER.is_on_floor():
 		transition.emit(PLAYER.STATES.JUMP.NAME)
 
 	if PLAYER.velocity.length() == 0.0 && PLAYER.is_on_floor():
