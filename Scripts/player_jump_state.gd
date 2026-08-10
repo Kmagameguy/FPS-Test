@@ -10,6 +10,9 @@ func enter(_previous_state: PlayerState) -> void:
 	PLAYER.velocity.y = JUMP_VELOCITY
 
 func update(delta: float) -> void:
+	PLAYER.update_fov(SPEED, delta)
+
+func physics_update(delta: float) -> void:
 	PLAYER.update_gravity(delta)
 	PLAYER.update_input(SPEED * INPUT_REDUCER, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
@@ -26,6 +29,3 @@ func update(delta: float) -> void:
 
 	if PLAYER.velocity.y < -4.0 && PLAYER.is_in_air():
 		transition.emit(PLAYER.STATES.FALL.NAME)
-
-func physics_update(delta: float) -> void:
-	PLAYER.update_fov(SPEED, delta)
