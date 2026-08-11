@@ -2,9 +2,16 @@ class_name Player extends CharacterBody3D
 
 @onready var head = $Head
 @onready var player_view = $Head/PlayerView
+@onready var collision: CollisionShape3D = $PlayerCollision
+@onready var player_mesh: MeshInstance3D = $PlayerMesh
+@onready var _floor_offset: float = collision.transform.origin.y - STAND_HEIGHT * 0.5
+@onready var _standing_head_y: float = head.transform.origin.y
 @export var BOB_FREQUENCY: float = 2.0
 @export var BASE_FOV     : float = 90.0
 @export var MOUSE_SENSITIVITY: float = 0.003
+@export var STAND_HEIGHT: float = 2.0
+@export var CROUCH_HEIGHT: float = 1.0
+@export var CAPSULE_RADIUS: float = 0.5
 
 const BOB_AMPLIFICATION: float  = 0.08
 const TILT_LOWER_LIMIT : float  = deg_to_rad(-60)
@@ -21,15 +28,20 @@ const STATES: Dictionary = {
 	TIP_TOE = { NAME = "PlayerTipToeState", ACTION = "tiptoe"},
 	JUMP    = { NAME = "PlayerJumpState", ACTION = "jump" },
 	DOUBLE_JUMP = { NAME = "PlayerDoubleJumpState", ACTION = "jump" },
-	FALL    = { NAME = "PlayerFallState", ACTION = null }
+	FALL    = { NAME = "PlayerFallState", ACTION = null },
+	CROUCH  = { NAME = "PlayerCrouchState", ACTION = "crouch" }
 }
 
 var _t_bob: float = 0.0
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+var _stand_check_shape := CapsuleShape3D.new()
+
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_stand_check_shape.radius = CAPSULE_RADIUS
+	_stand_check_shape.height = STAND_HEIGHT
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -73,6 +85,29 @@ func update_headbob(delta: float) -> void:
 func update_fov(speed: float, delta: float) -> void:
 	var target_fov = BASE_FOV + FOV_MULTIPLIER * clamp(velocity.length(), 0.5, speed * 2)
 	player_view.fov = lerp(player_view.fov, target_fov, delta * 9.0)
+
+func set_stance_height(height: float) -> void:
+	(collision.shape as CapsuleShape3D).height = height
+	(player_mesh.mesh as CapsuleMesh).height = height
+
+	var center_y := _floor_offset + height * 0.5
+	collision.transform.origin.y = center_y
+	player_mesh.transform.origin.y = center_y
+	head.transform.origin.y = _standing_head_y - (STAND_HEIGHT - height)
+
+func can_stand_up() -> bool:
+	if collision.shape.height >= STAND_HEIGHT:
+		return true
+
+	var space_state := get_world_3d().direct_space_state
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _stand_check_shape
+	query.transform = global_transform
+	query.transform.origin.y = global_position.y + _floor_offset + STAND_HEIGHT * 0.5
+	query.exclude = [get_rid()]
+	query.collision_mask = collision_mask
+
+	return space_state.intersect_shape(query, 1).is_empty()
 
 func _headbob(time: float) -> Vector3:
 	var pos: Vector3 = Vector3.ZERO

@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cj5cvduf3p2yk" path="res://Scripts/player_fall_state.gd" id="4_lomln"]
 [ext_resource type="Script" uid="uid://bci2ya425xj4e" path="res://Scripts/player_sprint_state.gd" id="5_d13fw"]
 [ext_resource type="Script" uid="uid://b380l8pwlv734" path="res://Scripts/player_double_jump_state.gd" id="5_jalsx"]
+[ext_resource type="Script" uid="uid://b3qfkvt6i84ub" path="res://Scripts/player_crouch_state.gd" id="10_4jfj4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i5u8c"]
 
@@ -54,3 +55,7 @@ script = ExtResource("5_d13fw")
 
 [node name="PlayerWalkState" type="Node" parent="PlayerStateMachine" unique_id=506104373]
 script = ExtResource("4_2vd8x")
+
+[node name="PlayerCrouchState" type="Node" parent="PlayerStateMachine" unique_id=2087594115]
+script = ExtResource("10_4jfj4")
+metadata/_custom_type_script = "uid://b3qfkvt6i84ub"
