@@ -1,4 +1,4 @@
-class_name PlayerFallingState extends PlayerMovementState
+class_name PlayerFallState extends PlayerMovementState
 
 @export var SPEED: float = 6.0
 @export var ACCELERATION: float = 0.1

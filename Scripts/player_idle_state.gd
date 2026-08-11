@@ -19,5 +19,8 @@ func physics_update(delta: float) -> void:
 	if Input.is_action_just_pressed(PLAYER.STATES.JUMP.ACTION) && PLAYER.is_on_floor():
 		transition.emit(PLAYER.STATES.JUMP.NAME)
 
-	if PLAYER.velocity.y < -3.0 && PLAYER.is_in_air():
+	if Input.is_action_pressed(PLAYER.STATES.CROUCH.ACTION) && PLAYER.is_on_floor():
+		transition.emit(PLAYER.STATES.CROUCH.NAME)
+
+	if PLAYER.velocity.y < PLAYER.FALL_VELOCITY_THRESHOLD && PLAYER.is_in_air():
 		transition.emit(PLAYER.STATES.FALL.NAME)
