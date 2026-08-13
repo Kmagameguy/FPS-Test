@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://7v5q1i10fneg"]
 
 [ext_resource type="Script" uid="uid://ccr31dpq3owas" path="res://Scripts/Player.gd" id="1_m2e61"]
-[ext_resource type="Script" uid="uid://dyyeyg5wvyy7r" path="res://Scripts/player_state_machine.gd" id="2_033c6"]
+[ext_resource type="Script" uid="uid://mal4et6e0nbq" path="res://Scripts/player_state_machine.gd" id="2_033c6"]
 [ext_resource type="Script" uid="uid://b4er171myucyg" path="res://Scripts/player_idle_state.gd" id="3_3uyrk"]
 [ext_resource type="Script" uid="uid://buj0ecaoi8wyd" path="res://Scripts/player_walk_state.gd" id="4_2vd8x"]
 [ext_resource type="Script" uid="uid://jgxp8k57fmiw" path="res://Scripts/player_tip_toe_state.gd" id="4_16a1l"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bci2ya425xj4e" path="res://Scripts/player_sprint_state.gd" id="5_d13fw"]
 [ext_resource type="Script" uid="uid://b380l8pwlv734" path="res://Scripts/player_double_jump_state.gd" id="5_jalsx"]
 [ext_resource type="Script" uid="uid://b3qfkvt6i84ub" path="res://Scripts/player_crouch_state.gd" id="10_4jfj4"]
+[ext_resource type="Script" uid="uid://bq8hesi46ypch" path="res://Scripts/player_slide_state.gd" id="11_uv5gm"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_i5u8c"]
 
@@ -59,3 +60,6 @@ script = ExtResource("4_2vd8x")
 [node name="PlayerCrouchState" type="Node" parent="PlayerStateMachine" unique_id=2087594115]
 script = ExtResource("10_4jfj4")
 metadata/_custom_type_script = "uid://b3qfkvt6i84ub"
+
+[node name="PlayerSlideState" type="Node" parent="PlayerStateMachine" unique_id=1305397483]
+script = ExtResource("11_uv5gm")

@@ -4,6 +4,9 @@ class_name PlayerIdleState extends PlayerMovementState
 @export var ACCELERATION: float = 0.1
 @export var DECELERATION: float = 0.25
 
+func enter(_previous_state: PlayerState) -> void:
+	PLAYER.set_stance_height(PLAYER.STAND_HEIGHT)
+
 func update(delta: float) -> void:
 	PLAYER.update_headbob(delta)
 	PLAYER.update_fov(SPEED, delta)

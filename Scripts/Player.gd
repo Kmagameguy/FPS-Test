@@ -23,14 +23,15 @@ const FLOOR_VELOCITY_MULTIPLIER: float = 7.0
 const AIR_VELOCITY_MULTIPLIER  : float = 3.0
 
 const STATES: Dictionary = {
-	IDLE    = { NAME = "PlayerIdleState", ACTION = null },
-	WALK    = { NAME = "PlayerWalkState", ACTION = null },
+	IDLE    = { NAME = "PlayerIdleState",   ACTION = null },
+	WALK    = { NAME = "PlayerWalkState",   ACTION = null },
 	SPRINT  = { NAME = "PlayerSprintState", ACTION = "sprint" },
 	TIP_TOE = { NAME = "PlayerTipToeState", ACTION = "tiptoe"},
-	JUMP    = { NAME = "PlayerJumpState", ACTION = "jump" },
+	JUMP    = { NAME = "PlayerJumpState",   ACTION = "jump" },
 	DOUBLE_JUMP = { NAME = "PlayerDoubleJumpState", ACTION = "jump" },
-	FALL    = { NAME = "PlayerFallState", ACTION = null },
-	CROUCH  = { NAME = "PlayerCrouchState", ACTION = "crouch" }
+	FALL    = { NAME = "PlayerFallState",   ACTION = null },
+	CROUCH  = { NAME = "PlayerCrouchState", ACTION = "crouch" },
+	SLIDE   = { NAME = "PlayerSlideState",  ACTION = null }
 }
 
 var _t_bob: float = 0.0
