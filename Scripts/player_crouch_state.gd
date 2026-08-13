@@ -7,9 +7,6 @@ class_name PlayerCrouchState extends PlayerMovementState
 func enter(_previous_state: PlayerState) -> void:
 	PLAYER.set_stance_height(PLAYER.CROUCH_HEIGHT)
 
-func exit() -> void:
-	PLAYER.set_stance_height(PLAYER.STAND_HEIGHT)
-
 func update(delta: float) -> void:
 	PLAYER.update_headbob(delta)
 	PLAYER.update_fov(SPEED, delta)
