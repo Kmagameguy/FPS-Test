@@ -13,6 +13,9 @@ func physics_update(delta: float) -> void:
 	PLAYER.update_input(SPEED, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 
+	if Input.is_action_just_pressed(PLAYER.STATES.CROUCH.ACTION) && PLAYER.is_on_floor():
+		transition.emit(PLAYER.STATES.SLIDE.NAME)
+
 	if Input.is_action_just_released(PLAYER.STATES.SPRINT.ACTION):
 		transition.emit(PLAYER.STATES.WALK.NAME)
 
