@@ -21,6 +21,9 @@ func physics_update(delta: float) -> void:
 	PLAYER.velocity.z = _slide_velocity.z
 	PLAYER.update_velocity()
 
+	if Input.is_action_pressed(PLAYER.STATES.RAGDOLL.ACTION):
+		transition.emit(PLAYER.STATES.RAGDOLL.NAME)
+
 	if _slide_velocity.length() <= MIN_SLIDE_SPEED && PLAYER.is_on_floor():
 		if Input.is_action_pressed(PLAYER.STATES.CROUCH.ACTION) || !PLAYER.can_stand_up():
 			transition.emit(PLAYER.STATES.CROUCH.NAME)

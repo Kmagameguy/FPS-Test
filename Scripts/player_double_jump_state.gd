@@ -14,6 +14,9 @@ func update(delta: float) -> void:
 	PLAYER.update_input(SPEED * INPUT_REDUCER, ACCELERATION, DECELERATION)
 	PLAYER.update_velocity()
 
+	if Input.is_action_pressed(PLAYER.STATES.RAGDOLL.ACTION):
+		transition.emit(PLAYER.STATES.RAGDOLL.NAME)
+
 	if Input.is_action_just_released(PLAYER.STATES.JUMP.ACTION):
 		if PLAYER.velocity.y > 0:
 			PLAYER.velocity.y = PLAYER.velocity.y / 2.0
