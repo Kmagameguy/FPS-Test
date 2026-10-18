@@ -13,7 +13,7 @@ class_name Player extends CharacterBody3D
 @export var CROUCH_HEIGHT: float = 1.0
 @export var CAPSULE_RADIUS: float = 0.5
 @export var FALL_VELOCITY_THRESHOLD: float = -3.0
-@export var CROUCH_TRANSITION_SPEED: float = 0.05 # represents height-units-per-second
+@export var CROUCH_TRANSITION_SPEED: float = 3.0 # height-units-per-second
 
 const BOB_AMPLIFICATION: float  = 0.08
 const TILT_LOWER_LIMIT : float  = deg_to_rad(-60)
@@ -31,7 +31,8 @@ const STATES: Dictionary = {
 	DOUBLE_JUMP = { NAME = "PlayerDoubleJumpState", ACTION = "jump" },
 	FALL    = { NAME = "PlayerFallState",   ACTION = null },
 	CROUCH  = { NAME = "PlayerCrouchState", ACTION = "crouch" },
-	SLIDE   = { NAME = "PlayerSlideState",  ACTION = null }
+	SLIDE   = { NAME = "PlayerSlideState",  ACTION = null },
+	RAGDOLL = { NAME = "PlayerRagdollState", ACTION = "ragdoll" }
 }
 
 var _t_bob: float = 0.0
@@ -41,6 +42,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var _stand_check_shape := CapsuleShape3D.new()
 var _target_stance_height: float
 var _mesh_stance_height: float
+var _stance_speed: float
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -48,8 +50,12 @@ func _ready() -> void:
 	_stand_check_shape.height = STAND_HEIGHT
 	_target_stance_height = STAND_HEIGHT
 	_mesh_stance_height = STAND_HEIGHT
+	_stance_speed = CROUCH_TRANSITION_SPEED
 
 func _unhandled_input(event: InputEvent) -> void:
+	if $PlayerStateMachine.CURRENT_STATE is PlayerRagdollState:
+		return
+
 	if event is InputEventMouseButton:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -65,21 +71,21 @@ func _input(event: InputEvent) -> void:
 func _is_moving_mouse_in_captured_window(event: InputEvent) -> bool:
 	return event is InputEventMouseMotion && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _mesh_stance_height == _target_stance_height:
 		return
 
-	_mesh_stance_height = move_toward(_mesh_stance_height, _target_stance_height, CROUCH_TRANSITION_SPEED)
+	_mesh_stance_height = move_toward(_mesh_stance_height, _target_stance_height, _stance_speed * delta)
 	(player_mesh.mesh as CapsuleMesh).height = _mesh_stance_height
 	player_mesh.transform.origin.y = _floor_offset + _mesh_stance_height * 0.5
 	head.transform.origin.y = _standing_head_y - (STAND_HEIGHT - _mesh_stance_height)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var current_height: float = collision.shape.height
 	if current_height == _target_stance_height:
 		return
-	
-	var new_height := move_toward(current_height, _target_stance_height, CROUCH_TRANSITION_SPEED)
+
+	var new_height := move_toward(current_height, _target_stance_height, _stance_speed * delta)
 	(collision.shape as CapsuleShape3D).height = new_height
 	collision.transform.origin.y = _floor_offset + new_height * 0.5
 
@@ -101,8 +107,14 @@ func update_fov(speed: float, delta: float) -> void:
 	var target_fov = BASE_FOV + FOV_MULTIPLIER * clamp(velocity.length(), 0.5, speed * 2)
 	player_view.fov = lerp(player_view.fov, target_fov, delta * 9.0)
 
-func set_stance_height(height: float) -> void:
+# Optional `speed` (height-units-per-second) overrides the normal crouch
+# transition speed. Omit it (or pass <= 0) to use CROUCH_TRANSITION_SPEED.
+func set_stance_height(height: float, speed: float = 0.0) -> void:
 	_target_stance_height = height
+	_stance_speed = speed if speed > 0.0 else CROUCH_TRANSITION_SPEED
+
+func get_stance_height() -> float:
+	return _target_stance_height
 
 func can_stand_up() -> bool:
 	if collision.shape.height >= STAND_HEIGHT:
